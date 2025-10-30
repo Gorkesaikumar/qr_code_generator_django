@@ -8,12 +8,12 @@ def generate_qr_code(request):
     if request.method == 'POST':
         form = QRCodeForm(request.POST)
         if form.is_valid():
-            resturant_name = form.cleaned_data['resturant_name']
+            name = form.cleaned_data['name']
             url = form.cleaned_data['url']
             
             # Generate QR code
             qr = qrcode.make(url)
-            file_name = resturant_name.replace(" ", "_").lower() + '_qr.png'
+            file_name = name.replace(" ", "_").lower() + '_qr.png'
             file_path = os.path.join(settings.MEDIA_ROOT, file_name)
             qr.save(file_path)
 
@@ -21,7 +21,7 @@ def generate_qr_code(request):
             # ✅ Return a response after saving
             return render(request, 'qr_result.html', {
                 'qr_image': img_url,
-                'resturant_name': resturant_name,
+                'name': name,
                 'file_name': file_name,
             })
         else:
